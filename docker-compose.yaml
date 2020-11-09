@@ -1,0 +1,30 @@
+---
+version: "3.8"
+services:
+
+  flogo:
+    container_name: ${NAMESPACE}-flogo
+    image: flogo/flogo-docker
+    networks:
+    - internal
+    - web
+    ports:
+    - 3303:3303
+    command: ["eula-accept"]  
+
+  fake-api:
+    image: jaxgeller/lwan
+    container_name: ${NAMESPACE}-fake-api
+    ports:
+    - "8000:8080"
+    volumes:
+    - ./data:/lwan/wwwroot
+    networks:
+    - web
+    - internal
+
+networks:
+  internal:
+    driver: bridge
+  web:
+    external: true
